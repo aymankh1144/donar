@@ -1,0 +1,6 @@
+Options -Indexes
+
+RewriteEngine On
+RewriteRule ^data/ - [F,L]
+RewriteRule ^assets/uploads/.*\.(php|phtml|phar|php5|php7)$ - [F,L]
+RewriteRule ^admin/?$ admin/login.php [R=302,L]
