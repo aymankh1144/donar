@@ -15,6 +15,8 @@ function getDB() {
         $db->exec('PRAGMA journal_mode=WAL; PRAGMA foreign_keys=ON;');
         initDB($db);
     }
+    // ✅ حذف الطلبات الأقدم من 7 أيام تلقائياً
+    $db->exec("DELETE FROM orders WHERE created_at < datetime('now', '-7 days')");
     return $db;
 }
 
@@ -81,6 +83,20 @@ function initDB($db) {
             is_active INTEGER DEFAULT 1,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         );
+
+        CREATE TABLE IF NOT EXISTS orders (
+            id          INTEGER PRIMARY KEY AUTOINCREMENT,
+            order_num   TEXT NOT NULL UNIQUE,
+            customer_name TEXT NOT NULL DEFAULT '',
+            customer_phone TEXT NOT NULL DEFAULT '',
+            items       TEXT NOT NULL DEFAULT '[]',
+            notes       TEXT NOT NULL DEFAULT '',
+            total       REAL NOT NULL DEFAULT 0,
+            status      TEXT NOT NULL DEFAULT 'pending',
+            telegram_message_id INTEGER DEFAULT NULL,
+            created_at  DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at  DATETIME DEFAULT CURRENT_TIMESTAMP
+        );
     ");
 
     $stmt = $db->prepare("INSERT OR IGNORE INTO settings (key, value) VALUES (?, ?)");
@@ -96,6 +112,9 @@ function initDB($db) {
         ['contact_facebook', ''],
         ['contact_instagram', ''],
         ['contact_show', '1'],
+        ['telegram_bot_token', ''],
+        ['telegram_chat_id', ''],
+        ['telegram_webhook_secret', bin2hex(random_bytes(16))],
     ];
     foreach ($defaults as $d) $stmt->execute($d);
 
@@ -145,6 +164,26 @@ function initDB($db) {
         $sl->execute(['فيسبوك','https://www.facebook.com/share/18wLXpFRWv/','svg',$fbSvg,'#1877f2',3,1]);
         $sl->execute(['انستغرام','https://www.instagram.com/mister_donar?igsh=aWN5MjU3b2xtOHE5','svg',$igSvg,'#E1306C',4,1]);
     }
+}
+
+// توليد رقم طلب فريد مثل: ORD-20250505-0001
+function generateOrderNum(PDO $db): string {
+    $date   = date('Ymd');
+    $prefix = 'ORD-' . $date . '-';
+    // ✅ إصلاح: Prepared Statement بدلاً من إدراج المتغير مباشرة
+    $stmt = $db->prepare('SELECT order_num FROM orders WHERE order_num LIKE ? ORDER BY id DESC LIMIT 1');
+    $stmt->execute([$prefix . '%']);
+    $last = $stmt->fetchColumn();
+    $seq = $last ? (int)substr($last, -4) + 1 : 1;
+    return $prefix . str_pad($seq, 4, '0', STR_PAD_LEFT);
+}
+
+// جلب قيمة إعداد واحد من جدول settings
+function getSetting(PDO $db, string $key, string $default = ''): string {
+    $row = $db->prepare("SELECT value FROM settings WHERE key = ?");
+    $row->execute([$key]);
+    $val = $row->fetchColumn();
+    return $val !== false ? $val : $default;
 }
 
 function uploadImage($file, $prefix = 'item') {

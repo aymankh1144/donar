@@ -47,49 +47,8 @@ body{background:#0d0d0d;color:#D3C9B5;font-family:'Cairo',sans-serif;min-height:
 .stat-n{font-size:2rem;font-weight:700;color:var(--gold2);line-height:1}
 .stat-l{font-size:12px;color:rgba(200,170,100,.5);margin-top:5px}
 
-/* ═══ CARDS GRID — mobile-first ═══ */
-.cards-grid{display:grid;grid-template-columns:1fr;gap:12px}
-@media(min-width:640px){.cards-grid{grid-template-columns:repeat(2,1fr)}}
-@media(min-width:960px){.cards-grid{grid-template-columns:repeat(3,1fr)}}
-
-/* generic card */
-.mgmt-card{background:linear-gradient(145deg,#1e1b16,#141210);border:1px solid var(--border);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:8px;transition:border-color .2s}
-.mgmt-card:hover{border-color:rgba(201,168,76,.4)}
-.mgmt-card-head{display:flex;align-items:center;gap:10px}
-.mgmt-card-thumb{width:48px;height:48px;border-radius:9px;object-fit:cover;border:1px solid var(--border);flex-shrink:0}
-.mgmt-card-thumb-placeholder{width:48px;height:48px;border-radius:9px;background:rgba(201,168,76,.09);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
-.mgmt-card-title{font-size:14px;font-weight:700;color:#E8C97A;line-height:1.3}
-.mgmt-card-sub{font-size:12px;color:rgba(200,170,100,.5);margin-top:2px}
-.mgmt-card-body{font-size:13px;color:rgba(200,170,100,.65);line-height:1.7}
-.mgmt-card-body span{color:var(--gold);font-weight:600}
-.mgmt-card-foot{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-top:2px}
-.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
-.badge-on{background:rgba(99,180,80,.15);color:#6ab44a}
-.badge-off{background:rgba(200,80,80,.12);color:#c05050}
-.act{display:flex;gap:6px;flex-wrap:wrap}
-.btn-e,.btn-d{border:none;border-radius:7px;padding:6px 14px;font-size:12px;cursor:pointer;font-family:'Cairo',sans-serif;font-weight:600;transition:opacity .2s}
-.btn-e{background:rgba(201,168,76,.15);color:var(--gold)}
-.btn-d{background:rgba(200,80,80,.12);color:#e57373}
-.btn-e:hover,.btn-d:hover{opacity:.75}
-
-/* order cards */
-.order-card{background:linear-gradient(145deg,rgba(212,175,55,.06),rgba(212,175,55,.02));border:1px solid rgba(212,175,55,.18);border-radius:14px;padding:14px 16px;margin-bottom:12px;transition:border-color .2s}
-.order-card:hover{border-color:rgba(212,175,55,.4)}
-.order-card-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;gap:8px;flex-wrap:wrap}
-.order-num{font-weight:800;color:var(--gold);font-size:14px;letter-spacing:.5px}
-.order-badge{border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600;white-space:nowrap}
-.order-customer{font-size:14px;font-weight:600;margin-bottom:4px}
-.order-phone{font-size:12px;color:rgba(200,170,100,.5)}
-.order-items{background:rgba(0,0,0,.2);border-radius:8px;padding:8px 12px;margin:8px 0;font-size:13px;color:rgba(200,170,100,.7);line-height:1.8}
-.order-footer{display:flex;justify-content:space-between;align-items:center;margin-top:10px;flex-wrap:wrap;gap:6px}
-.order-total{font-weight:800;color:var(--gold);font-size:15px}
-.order-time{font-size:11px;color:rgba(200,170,100,.4)}
-.order-notes{font-size:12px;color:rgba(200,170,100,.45);margin-top:4px;font-style:italic}
-.orders-empty{text-align:center;padding:3rem 1rem;color:rgba(200,170,100,.3);font-size:14px}
-
-/* thumbnail */
-.thumb{width:42px;height:42px;border-radius:8px;object-fit:cover;border:1px solid var(--border)}
-.thumb-placeholder{width:42px;height:42px;border-radius:8px;background:rgba(201,168,76,.1);display:flex;align-items:center;justify-content:center;font-size:18px}
+/* TABLE */
+.tbl-wrap{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--border)}
 table{width:100%;border-collapse:collapse;background:linear-gradient(145deg,#1a1713,#111)}
 th{background:#111;color:rgba(200,170,100,.6);padding:11px 14px;text-align:right;font-size:13px;font-weight:500;white-space:nowrap}
 td{padding:11px 14px;border-bottom:1px solid rgba(201,168,76,.08);font-size:13px;color:#C9B89A;vertical-align:middle}
@@ -163,7 +122,6 @@ tr:hover td{background:rgba(201,168,76,.04)}
       <button class="nav-tab" onclick="showSec('cats',this)">📂 الفئات</button>
       <button class="nav-tab" onclick="showSec('items',this)">🍽️ الوجبات</button>
       <button class="nav-tab" onclick="showSec('offers',this)">🔥 العروض</button>
-      <button class="nav-tab" onclick="showSec('orders',this)">📋 الطلبات</button>
       <button class="nav-tab" onclick="showSec('links',this)">🔗 روابط الرئيسية</button>
       <button class="nav-tab" onclick="showSec('settings',this)">⚙️ الإعدادات</button>
     </nav>
@@ -193,7 +151,10 @@ tr:hover td{background:rgba(201,168,76,.04)}
       <span class="sec-title">إدارة الفئات</span>
       <button class="btn-add" onclick="openCatModal()">+ إضافة فئة</button>
     </div>
-    <div id="cats-cards" class="cards-grid"></div>
+    <div class="tbl-wrap">
+      <table><thead><tr><th>الاسم عربي</th><th>الاسم إنجليزي</th><th>أيقونة</th><th>عدد الوجبات</th><th>الحالة</th><th>إجراءات</th></tr></thead>
+      <tbody id="cats-body"><tr><td colspan="6" style="text-align:center;padding:2rem;color:rgba(200,170,100,.3)">جاري التحميل...</td></tr></tbody></table>
+    </div>
   </div>
 
   <!-- ITEMS -->
@@ -207,7 +168,10 @@ tr:hover td{background:rgba(201,168,76,.04)}
         <option value="">كل الفئات</option>
       </select>
     </div>
-    <div id="items-cards" class="cards-grid"></div>
+    <div class="tbl-wrap">
+      <table><thead><tr><th>صورة</th><th>الاسم عربي</th><th>الاسم إنجليزي</th><th>الفئة</th><th>السعر</th><th>الحالة</th><th>إجراءات</th></tr></thead>
+      <tbody id="items-body"><tr><td colspan="7" style="text-align:center;padding:2rem;color:rgba(200,170,100,.3)">جاري التحميل...</td></tr></tbody></table>
+    </div>
   </div>
 
   <!-- OFFERS -->
@@ -216,7 +180,10 @@ tr:hover td{background:rgba(201,168,76,.04)}
       <span class="sec-title">إدارة العروض</span>
       <button class="btn-add" onclick="openOfferModal()">+ إضافة عرض</button>
     </div>
-    <div id="offers-cards" class="cards-grid"></div>
+    <div class="tbl-wrap">
+      <table><thead><tr><th>صورة</th><th>العنوان</th><th>السعر القديم</th><th>سعر العرض</th><th>الخصم</th><th>الحالة</th><th>إجراءات</th></tr></thead>
+      <tbody id="offers-body"><tr><td colspan="7" style="text-align:center;padding:2rem;color:rgba(200,170,100,.3)">جاري التحميل...</td></tr></tbody></table>
+    </div>
   </div>
 
   <!-- SOCIAL LINKS -->
@@ -228,7 +195,10 @@ tr:hover td{background:rgba(201,168,76,.04)}
     <p style="color:rgba(200,170,100,.45);font-size:13px;margin-bottom:1rem">
       هذه الروابط تظهر كأيقونات دائرية في الصفحة الرئيسية (mr-donar.com). الترتيب يتحكم بموضع الأيقونة.
     </p>
-    <div id="links-cards" class="cards-grid"></div>
+    <div class="tbl-wrap">
+      <table><thead><tr><th>أيقونة</th><th>التسمية</th><th>الرابط</th><th>اللون</th><th>الترتيب</th><th>الحالة</th><th>إجراءات</th></tr></thead>
+      <tbody id="links-body"><tr><td colspan="7" style="text-align:center;padding:2rem;color:rgba(200,170,100,.3)">جاري التحميل...</td></tr></tbody></table>
+    </div>
   </div>
 
   <!-- SETTINGS -->
@@ -264,60 +234,8 @@ tr:hover td{background:rgba(201,168,76,.04)}
           <div class="fg"><label>كلمة المرور الجديدة</label><input type="password" id="s-new-pass" placeholder="كلمة المرور الجديدة"></div>
         </div>
       </div>
-
-      <!-- بوت تيليغرام -->
-      <div class="settings-card">
-        <div class="settings-title">🤖 بوت تيليغرام</div>
-        <p style="color:rgba(200,170,100,.45);font-size:13px;margin-bottom:1rem;line-height:1.7">
-          أنشئ بوتاً من <b>@BotFather</b> على تيليغرام واحصل على التوكن، ثم أرسل رسالة للبوت أو أضفه لمجموعة واحصل على الـ Chat ID.
-        </p>
-        <div class="fg">
-          <label>Bot Token</label>
-          <input type="text" id="s-bot-token" value="<?= htmlspecialchars($settings['telegram_bot_token']??'') ?>" placeholder="123456789:AAF...">
-        </div>
-        <div class="fg">
-          <label>Chat ID (معرّف المحادثة أو المجموعة)</label>
-          <input type="text" id="s-chat-id" value="<?= htmlspecialchars($settings['telegram_chat_id']??'') ?>" placeholder="-100123456789">
-        </div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px">
-          <button class="save-btn" onclick="saveBotSettings()" style="max-width:200px">💾 حفظ إعدادات البوت</button>
-          <button class="save-btn" onclick="testBot()" style="max-width:180px;background:rgba(37,211,102,.15);color:#25d366;border:1px solid rgba(37,211,102,.3)">🧪 اختبار البوت</button>
-        </div>
-        <div class="fg" style="margin-top:14px">
-          <label style="margin-bottom:6px;display:block">رابط الموقع / ngrok لتسجيل الـ Webhook</label>
-          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-            <input type="text" id="s-webhook-url" placeholder="https://xxxx.ngrok-free.app  أو  https://mr-donar.com" style="direction:ltr;flex:1;min-width:200px">
-            <button class="save-btn" onclick="registerWebhook()" style="max-width:180px;background:rgba(33,150,243,.15);color:#64b5f6;border:1px solid rgba(33,150,243,.3);flex-shrink:0">🔗 تسجيل Webhook</button>
-          <button class="save-btn" onclick="checkWebhook()" style="max-width:160px;background:rgba(255,193,7,.1);color:#ffc107;border:1px solid rgba(255,193,7,.3);flex-shrink:0">🔍 فحص الحالة</button>
-          </div>
-          <span style="font-size:11px;color:rgba(200,170,100,.35);display:block;margin-top:5px">سيُضاف /api/telegram.php للرابط تلقائياً</span>
-        </div>
-        <div id="bot-test-result" style="margin-top:10px;font-size:13px;display:none"></div>
-      </div>
-
       <button class="save-btn" onclick="saveSettings()" style="max-width:220px">💾 حفظ الإعدادات</button>
     </div>
-  </div>
-
-  <!-- قسم الطلبات -->
-  <div id="sec-orders" class="section">
-    <div class="sec-header">
-      <span class="sec-title">الطلبات <span id="orders-count-badge" style="background:rgba(212,175,55,.15);border:1px solid rgba(212,175,55,.3);border-radius:20px;padding:2px 10px;font-size:12px;margin-right:6px"></span></span>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-        <select id="orders-filter" onchange="loadOrders()" style="background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.25);color:var(--gold);border-radius:8px;padding:6px 12px;font-family:'Cairo',sans-serif;font-size:13px">
-          <option value="all">جميع الطلبات</option>
-          <option value="pending">⏳ بانتظار الرد</option>
-          <option value="accepted">✅ مقبولة</option>
-          <option value="preparing">🟠 قيد التحضير</option>
-          <option value="ready">🟢 جاهزة</option>
-          <option value="delivered">✔️ مُسلَّمة</option>
-          <option value="rejected">❌ مرفوضة</option>
-        </select>
-        <button class="btn-add" onclick="loadOrders()" style="padding:6px 14px">🔄</button>
-      </div>
-    </div>
-    <p style="font-size:12px;color:rgba(200,170,100,.4);margin-bottom:12px">⏱ تُحذف الطلبات تلقائياً بعد 7 أيام</p>
-    <div id="orders-cards"></div>
   </div>
 
 </main>
@@ -446,7 +364,6 @@ function showSec(name, btn) {
   else if (name === 'cats') loadCats();
   else if (name === 'items') loadItems();
   else if (name === 'offers') loadOffers();
-  else if (name === 'orders') loadOrders();
   else if (name === 'links') loadLinks();
 }
 
@@ -506,30 +423,21 @@ async function loadStats() {
 
 // ── CATEGORIES
 async function loadCats() {
-  const grid = document.getElementById('cats-cards');
-  grid.innerHTML = `<div class="orders-empty">⏳ جاري التحميل...</div>`;
+  const tbody = document.getElementById('cats-body');
+  tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:1.5rem;color:rgba(200,170,100,.3)">جاري التحميل...</td></tr>`;
   const res = await admGet({ action: 'get_categories' });
   STATE.cats = res.data || [];
-  if (!STATE.cats.length) { grid.innerHTML = `<div class="orders-empty">لا توجد فئات</div>`; return; }
-  grid.innerHTML = STATE.cats.map(c => `
-    <div class="mgmt-card">
-      <div class="mgmt-card-head">
-        <div class="mgmt-card-thumb-placeholder">${c.icon}</div>
-        <div>
-          <div class="mgmt-card-title">${c.name_ar}</div>
-          <div class="mgmt-card-sub">${c.name_en}</div>
-        </div>
-      </div>
-      <div class="mgmt-card-body">🍽️ <span>${c.item_count || 0}</span> وجبة</div>
-      <div class="mgmt-card-foot">
-        <span class="badge badge-${c.is_active==1?'on':'off'}">${c.is_active==1?'نشط':'مخفي'}</span>
-        <div class="act">
-          <button class="btn-e" onclick="editCat(${c.id})">✏️ تعديل</button>
-          <button class="btn-d" onclick="delCat(${c.id},'${c.name_ar}')">🗑</button>
-        </div>
-      </div>
-    </div>
-  `).join('');
+  tbody.innerHTML = STATE.cats.map(c => `
+    <tr>
+      <td>${c.name_ar}</td><td>${c.name_en}</td><td style="font-size:1.3rem">${c.icon}</td>
+      <td>${c.item_count || 0}</td>
+      <td><span class="badge badge-${c.is_active==1?'on':'off'}">${c.is_active==1?'نشط':'مخفي'}</span></td>
+      <td><div class="act">
+        <button class="btn-e" onclick="editCat(${c.id})">تعديل</button>
+        <button class="btn-d" onclick="delCat(${c.id},'${c.name_ar}')">حذف</button>
+      </div></td>
+    </tr>
+  `).join('') || `<tr><td colspan="6" style="text-align:center;padding:2rem;color:rgba(200,170,100,.3)">لا توجد فئات</td></tr>`;
 }
 
 function openCatModal(cat=null) {
@@ -571,40 +479,29 @@ async function delCat(id, name) {
 
 // ── ITEMS
 async function loadItems() {
-  const grid   = document.getElementById('items-cards');
+  const tbody = document.getElementById('items-body');
   const filter = document.getElementById('item-filter');
-  grid.innerHTML = `<div class="orders-empty">⏳ جاري التحميل...</div>`;
+  tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:1.5rem;color:rgba(200,170,100,.3)">جاري التحميل...</td></tr>`;
   if (STATE.cats.length === 0) { const cr = await admGet({action:'get_categories'}); STATE.cats = cr.data||[]; }
+  // populate filter
   const cur = filter.value;
   filter.innerHTML = `<option value="">كل الفئات</option>` + STATE.cats.map(c => `<option value="${c.id}" ${cur==c.id?'selected':''}>${c.name_ar}</option>`).join('');
   const params = { action: 'get_items' }; if (filter.value) params.category_id = filter.value;
   const res = await admGet(params);
   STATE.items = res.data || [];
-  if (!STATE.items.length) { grid.innerHTML = `<div class="orders-empty">لا توجد وجبات</div>`; return; }
-  grid.innerHTML = STATE.items.map(item => `
-    <div class="mgmt-card">
-      <div class="mgmt-card-head">
-        ${item.image_url
-          ? `<img class="mgmt-card-thumb" src="../${item.image_url}" alt="">`
-          : `<div class="mgmt-card-thumb-placeholder">${STATE.cats.find(c=>c.id==item.category_id)?.icon||'🍽️'}</div>`}
-        <div>
-          <div class="mgmt-card-title">${item.name_ar}</div>
-          <div class="mgmt-card-sub">${item.name_en}</div>
-        </div>
-      </div>
-      <div class="mgmt-card-body">
-        💰 <span>${Number(item.price).toLocaleString('ar-SY')} ل.س</span>
-        &nbsp;|&nbsp; 📂 ${item.cat_name_ar||''}
-      </div>
-      <div class="mgmt-card-foot">
-        <span class="badge badge-${item.is_active==1?'on':'off'}">${item.is_active==1?'نشط':'مخفي'}</span>
-        <div class="act">
-          <button class="btn-e" onclick="editItem(${item.id})">✏️ تعديل</button>
-          <button class="btn-d" onclick="delItem(${item.id},'${item.name_ar}')">🗑</button>
-        </div>
-      </div>
-    </div>
-  `).join('');
+  tbody.innerHTML = STATE.items.map(item => `
+    <tr>
+      <td>${item.image_url ? `<img class="thumb" src="../${item.image_url}" alt="">` : `<div class="thumb-placeholder">${STATE.cats.find(c=>c.id==item.category_id)?.icon||'🍽️'}</div>`}</td>
+      <td>${item.name_ar}</td><td>${item.name_en}</td>
+      <td>${item.cat_name_ar||''}</td>
+      <td>${Number(item.price).toLocaleString('ar-SY')} ل.س</td>
+      <td><span class="badge badge-${item.is_active==1?'on':'off'}">${item.is_active==1?'نشط':'مخفي'}</span></td>
+      <td><div class="act">
+        <button class="btn-e" onclick="editItem(${item.id})">تعديل</button>
+        <button class="btn-d" onclick="delItem(${item.id},'${item.name_ar}')">حذف</button>
+      </div></td>
+    </tr>
+  `).join('') || `<tr><td colspan="7" style="text-align:center;padding:2rem;color:rgba(200,170,100,.3)">لا توجد وجبات</td></tr>`;
 }
 
 async function openItemModal(item=null) {
@@ -666,36 +563,24 @@ async function delItem(id, name) {
 
 // ── OFFERS
 async function loadOffers() {
-  const grid = document.getElementById('offers-cards');
-  grid.innerHTML = `<div class="orders-empty">⏳ جاري التحميل...</div>`;
+  const tbody = document.getElementById('offers-body');
+  tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:1.5rem;color:rgba(200,170,100,.3)">جاري التحميل...</td></tr>`;
   const res = await admGet({ action: 'get_offers' });
   const offers = res.data || [];
-  if (!offers.length) { grid.innerHTML = `<div class="orders-empty">لا توجد عروض</div>`; return; }
-  grid.innerHTML = offers.map(o => `
-    <div class="mgmt-card">
-      <div class="mgmt-card-head">
-        ${o.image_url
-          ? `<img class="mgmt-card-thumb" src="../${o.image_url}" alt="">`
-          : `<div class="mgmt-card-thumb-placeholder">🔥</div>`}
-        <div>
-          <div class="mgmt-card-title">${o.title_ar}</div>
-          <div class="mgmt-card-sub">${o.title_en}</div>
-        </div>
-      </div>
-      <div class="mgmt-card-body">
-        <span style="text-decoration:line-through;color:rgba(200,170,100,.35);font-size:12px">${Number(o.original_price).toLocaleString('ar-SY')} ل.س</span>
-        &nbsp;→&nbsp; <span>${Number(o.offer_price).toLocaleString('ar-SY')} ل.س</span>
-        &nbsp;&nbsp;<span style="color:#e74c3c">-${o.discount}%</span>
-      </div>
-      <div class="mgmt-card-foot">
-        <span class="badge badge-${o.is_active==1?'on':'off'}">${o.is_active==1?'نشط':'مخفي'}</span>
-        <div class="act">
-          <button class="btn-e" onclick="editOffer(${o.id})">✏️ تعديل</button>
-          <button class="btn-d" onclick="delOffer(${o.id},'${o.title_ar}')">🗑</button>
-        </div>
-      </div>
-    </div>
-  `).join('');
+  tbody.innerHTML = offers.map(o => `
+    <tr>
+      <td>${o.image_url ? `<img class="thumb" src="../${o.image_url}" alt="">` : `<div class="thumb-placeholder">🔥</div>`}</td>
+      <td>${o.title_ar}</td>
+      <td style="text-decoration:line-through;color:rgba(200,170,100,.4)">${Number(o.original_price).toLocaleString('ar-SY')}</td>
+      <td style="color:#E8C97A;font-weight:700">${Number(o.offer_price).toLocaleString('ar-SY')}</td>
+      <td><span style="color:#e74c3c;font-weight:700">-${o.discount}%</span></td>
+      <td><span class="badge badge-${o.is_active==1?'on':'off'}">${o.is_active==1?'نشط':'مخفي'}</span></td>
+      <td><div class="act">
+        <button class="btn-e" onclick="editOffer(${o.id})">تعديل</button>
+        <button class="btn-d" onclick="delOffer(${o.id},'${o.title_ar}')">حذف</button>
+      </div></td>
+    </tr>
+  `).join('') || `<tr><td colspan="7" style="text-align:center;padding:2rem;color:rgba(200,170,100,.3)">لا توجد عروض</td></tr>`;
 }
 
 async function openOfferModal(offer=null) {
@@ -782,35 +667,27 @@ async function doLogout() {
 
 // ── SOCIAL LINKS
 async function loadLinks() {
-  const grid = document.getElementById('links-cards');
-  grid.innerHTML = `<div class="orders-empty">⏳ جاري التحميل...</div>`;
+  const tbody = document.getElementById('links-body');
+  tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:1.5rem;color:rgba(200,170,100,.3)">جاري التحميل...</td></tr>`;
   const res = await admGet({ action: 'get_social_links' });
   const links = res.data || [];
-  if (!links.length) { document.getElementById('links-cards').innerHTML = `<div class="orders-empty">لا توجد روابط — أضف أول رابط الآن</div>`; return; }
-  document.getElementById('links-cards').innerHTML = links.map(l => {
+  tbody.innerHTML = links.map(l => {
     const iconHtml = l.icon_type === 'upload' && l.icon_url
-      ? `<img src="../${l.icon_url}" style="width:36px;height:36px;border-radius:50%;object-fit:contain;background:#fff;padding:3px">`
-      : (l.icon_type === 'svg' ? `<span style="color:${l.color};display:flex;align-items:center">${l.icon_value.replace(/<svg/,'<svg style="width:28px;height:28px"')}</span>` : '–');
-    const shortUrl = l.url.length > 30 ? l.url.slice(0,30)+'…' : l.url;
-    return `
-    <div class="mgmt-card">
-      <div class="mgmt-card-head">
-        <div class="mgmt-card-thumb-placeholder" style="background:${l.color}22;border:1px solid ${l.color}44">${iconHtml}</div>
-        <div>
-          <div class="mgmt-card-title">${l.label}</div>
-          <div class="mgmt-card-sub" style="direction:ltr;font-size:11px">${shortUrl}</div>
-        </div>
-      </div>
-      <div class="mgmt-card-body">🔢 ترتيب: <span>${l.sort_order}</span></div>
-      <div class="mgmt-card-foot">
-        <span class="badge badge-${l.is_active==1?'on':'off'}">${l.is_active==1?'نشط':'مخفي'}</span>
-        <div class="act">
-          <button class="btn-e" onclick="editLink(${l.id})">✏️ تعديل</button>
-          <button class="btn-d" onclick="delLink(${l.id},'${l.label}')">🗑</button>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
+      ? `<img src="../${l.icon_url}" style="width:30px;height:30px;border-radius:50%;object-fit:contain;background:#fff;padding:3px">`
+      : (l.icon_type === 'svg' ? `<span style="color:${l.color};font-size:20px;display:flex;align-items:center">${l.icon_value.replace(/<svg/,'<svg style="width:22px;height:22px"')}</span>` : '–');
+    return `<tr>
+      <td>${iconHtml}</td>
+      <td>${l.label}</td>
+      <td style="direction:ltr;font-size:12px;color:rgba(200,170,100,.5);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${l.url}</td>
+      <td><span style="display:inline-block;width:22px;height:22px;border-radius:50%;background:${l.color};border:1px solid rgba(255,255,255,.2)"></span></td>
+      <td style="color:rgba(200,170,100,.5)">${l.sort_order}</td>
+      <td><span class="badge badge-${l.is_active==1?'on':'off'}">${l.is_active==1?'نشط':'مخفي'}</span></td>
+      <td><div class="act">
+        <button class="btn-e" onclick="editLink(${l.id})">تعديل</button>
+        <button class="btn-d" onclick="delLink(${l.id},'${l.label}')">حذف</button>
+      </div></td>
+    </tr>`;
+  }).join('') || `<tr><td colspan="7" style="text-align:center;padding:2rem;color:rgba(200,170,100,.3)">لا توجد روابط — أضف أول رابط الآن</td></tr>`;
 }
 
 let _linksCache = [];
@@ -883,154 +760,6 @@ async function delLink(id, label) {
   if (res.success) { toast('تم الحذف'); loadLinks(); }
   else toast('خطأ', 'err');
 }
-
-// ── إعدادات البوت ─────────────────────────────────────────
-async function saveBotSettings() {
-  const token  = document.getElementById('s-bot-token').value.trim();
-  const chatId = document.getElementById('s-chat-id').value.trim();
-  const res = await adm({ action: 'update_settings', telegram_bot_token: token, telegram_chat_id: chatId });
-  if (res.success) toast('تم حفظ إعدادات البوت ✓');
-  else toast('خطأ في الحفظ', 'err');
-}
-
-async function testBot() {
-  const result = document.getElementById('bot-test-result');
-  result.style.display = 'block';
-  result.style.color = 'rgba(200,170,100,.6)';
-  result.textContent = '⏳ جارٍ الاختبار...';
-  const res = await adm({ action: 'test_telegram' });
-  if (res.success) {
-    result.style.color = '#25d366';
-    result.textContent = '✅ البوت يعمل بشكل صحيح!';
-  } else {
-    result.style.color = '#e57373';
-    result.textContent = '❌ ' + (res.message || 'فشل الاتصال — تحقق من التوكن والـ Chat ID');
-  }
-}
-
-async function registerWebhook() {
-  const result = document.getElementById('bot-test-result');
-  const webhookInput = document.getElementById('s-webhook-url');
-  const webhookUrl = (webhookInput?.value || '').trim();
-  
-  if (!webhookUrl) {
-    result.style.display = 'block';
-    result.style.color = '#e57373';
-    result.textContent = '❌ يرجى إدخال رابط الموقع أو ngrok أولاً';
-    return;
-  }
-
-  result.style.display = 'block';
-  result.style.color = 'rgba(200,170,100,.6)';
-  result.textContent = '⏳ جارٍ تسجيل الـ Webhook...';
-
-  const fd = new FormData();
-  fd.append('action', 'register_webhook');
-  fd.append('webhook_url', webhookUrl);
-  const res = await fetch('../api/admin.php', { method: 'POST', body: fd }).then(r => r.json()).catch(() => ({ success: false }));
-
-  if (res.success) {
-    result.style.color = '#64b5f6';
-    result.textContent = '✅ تم تسجيل الـ Webhook على: ' + (res.url || '');
-  } else {
-    result.style.color = '#e57373';
-    result.textContent = '❌ ' + (res.message || 'فشل التسجيل');
-  }
-}
-
-async function checkWebhook() {
-  const result = document.getElementById('bot-test-result');
-  result.style.display = 'block';
-  result.style.color = 'rgba(200,170,100,.6)';
-  result.textContent = '⏳ جارٍ فحص حالة الـ Webhook...';
-  const fd = new FormData();
-  fd.append('action', 'check_webhook');
-  const res = await fetch('../api/admin.php', { method: 'POST', body: fd }).then(r => r.json()).catch(() => ({ success: false }));
-  if (res.success && res.webhook_info) {
-    const w = res.webhook_info;
-    const url = w.url || '(لا يوجد رابط)';
-    const pending = w.pending_update_count || 0;
-    const lastErr = w.last_error_message || '';
-    result.style.color = w.url ? '#64b5f6' : '#e57373';
-    result.innerHTML = `<b>Webhook URL:</b> ${url}<br>`
-      + `<b>طلبات معلّقة:</b> ${pending}<br>`
-      + (lastErr ? `<b style="color:#e57373">آخر خطأ:</b> ${lastErr}` : '<span style="color:#4caf50">✅ لا توجد أخطاء</span>');
-  } else {
-    result.style.color = '#e57373';
-    result.textContent = '❌ فشل الفحص — ' + (res.message || '');
-  }
-}
-
-// ── الطلبات ───────────────────────────────────────────────
-const ORDER_STATUS_LABELS = {
-  pending:   '⏳ بانتظار الرد',
-  accepted:  '✅ مقبول',
-  rejected:  '❌ مرفوض',
-  preparing: '🟠 قيد التحضير',
-  ready:     '🟢 جاهز',
-  delivered: '✔️ مُسلَّم',
-};
-const ORDER_STATUS_COLORS = {
-  pending:   'rgba(212,175,55,.3)',
-  accepted:  'rgba(37,211,102,.3)',
-  rejected:  'rgba(229,115,115,.3)',
-  preparing: 'rgba(255,152,0,.3)',
-  ready:     'rgba(37,211,102,.4)',
-  delivered: 'rgba(100,181,246,.3)',
-};
-
-async function loadOrders() {
-  const container = document.getElementById('orders-cards');
-  const badge     = document.getElementById('orders-count-badge');
-  const filter    = document.getElementById('orders-filter').value;
-  container.innerHTML = `<div class="orders-empty">⏳ جاري التحميل...</div>`;
-
-  const res    = await admGet({ action: 'get_orders', status: filter });
-  const orders = res.data || [];
-
-  if (badge) badge.textContent = orders.length ? `${orders.length} طلب` : '';
-
-  if (!orders.length) {
-    container.innerHTML = `<div class="orders-empty">📭 لا توجد طلبات</div>`;
-    return;
-  }
-
-  container.innerHTML = orders.map(o => {
-    const items   = JSON.parse(o.items || '[]');
-    const color   = ORDER_STATUS_COLORS[o.status] || 'rgba(212,175,55,.2)';
-    const label   = ORDER_STATUS_LABELS[o.status] || o.status;
-    const date    = new Date(o.created_at);
-    const now     = new Date();
-    const diffMin = Math.round((now - date) / 60000);
-    const timeStr = diffMin < 60
-      ? `منذ ${diffMin} دقيقة`
-      : diffMin < 1440
-        ? `منذ ${Math.round(diffMin/60)} ساعة`
-        : date.toLocaleDateString('ar-SY');
-
-    const itemsHtml = items.map(i =>
-      `<div>• ${i.name} <span style="color:var(--gold)">×${i.qty}</span> — ${Number(i.price * i.qty).toLocaleString('ar-SY')} ل.س</div>`
-    ).join('');
-
-    return `<div class="order-card">
-      <div class="order-card-head">
-        <span class="order-num">${o.order_num}</span>
-        <span class="order-badge" style="background:${color}">${label}</span>
-      </div>
-      <div class="order-customer">${o.customer_name}</div>
-      ${o.customer_phone ? `<div class="order-phone">📞 ${o.customer_phone}</div>` : ''}
-      <div class="order-items">${itemsHtml}</div>
-      ${o.notes ? `<div class="order-notes">📝 ${o.notes}</div>` : ''}
-      <div class="order-footer">
-        <span class="order-total">${Number(o.total).toLocaleString('ar-SY')} ل.س</span>
-        <span class="order-time">🕐 ${timeStr}</span>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-// ── إضافة get_orders و test_telegram و register_webhook للـ API ──
-// (تم تعريفها في admin.php)
 
 window.addEventListener('keydown', e => { if(e.key==='Escape') document.querySelectorAll('.modal-ov.open').forEach(m=>m.classList.remove('open')); });
 </script>

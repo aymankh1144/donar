@@ -63,4 +63,12 @@ switch ($action) {
         }
         echo json_encode(['success'=>true,'data'=>$rows]);
         break;
+
+    case 'all_items':
+        $rows = $db->query("SELECT i.*,c.name_ar as cat_ar FROM items i JOIN categories c ON i.category_id=c.id WHERE i.is_active=1 ORDER BY i.sort_order,i.id")->fetchAll();
+        foreach ($rows as &$r) {
+            $r['image_url'] = $r['image'] ? 'assets/uploads/'.$r['image'] : '';
+        }
+        echo json_encode(['success'=>true,'data'=>$rows]);
+        break;
 }

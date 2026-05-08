@@ -1,6 +1,18 @@
 Options -Indexes
 
+# حماية ملفات حساسة
+<FilesMatch "\.(db|sqlite|sql|log|env|ini|sh|bak)$">
+    Require all denied
+</FilesMatch>
+
+# منع تشغيل PHP في مجلدات الرفع
 RewriteEngine On
 RewriteRule ^data/ - [F,L]
-RewriteRule ^assets/uploads/.*\.(php|phtml|phar|php5|php7)$ - [F,L]
+RewriteRule ^assets/uploads/.*\.(php|phtml|phar|php\d*)$ - [F,L]
+RewriteRule ^assets/icons/.*\.(php|phtml|phar|php\d*)$ - [F,L]
+
+# إعادة توجيه /admin إلى صفحة تسجيل الدخول
 RewriteRule ^admin/?$ admin/login.php [R=302,L]
+
+# منع الوصول إلى ملف test.php
+RewriteRule ^test\.php$ - [F,L]

@@ -1,7 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /admin/
-Disallow: /api/
-Disallow: /data/
 
 Sitemap: https://mr-donar.com/sitemap.xml

@@ -152,7 +152,7 @@ switch ($action) {
 
     // ── SETTINGS
     case 'update_settings':
-        $allowed=['restaurant_name_ar','restaurant_name_en','slogan_ar','slogan_en','contact_phone','contact_whatsapp','contact_facebook','contact_instagram','contact_show'];
+        $allowed=['restaurant_name_ar','restaurant_name_en','slogan_ar','slogan_en','contact_phone','contact_whatsapp','contact_facebook','contact_instagram','contact_show','telegram_bot_token','telegram_chat_id'];
         $s=$db->prepare("INSERT OR REPLACE INTO settings (key,value) VALUES (?,?)");
         foreach ($allowed as $k) if (isset($_POST[$k])) $s->execute([$k,trim($_POST[$k])]);
         if (!empty($_POST['new_password'])&&!empty($_POST['current_password'])) {
@@ -161,6 +161,56 @@ switch ($action) {
             else { echo json_encode(['success'=>false,'message'=>'كلمة المرور الحالية غير صحيحة']); exit; }
         }
         echo json_encode(['success'=>true]); break;
+
+    // ── ORDERS
+    case 'get_orders':
+        $status = trim($_GET['status'] ?? 'all');
+        if ($status === 'all') {
+            $rows = $db->query("SELECT * FROM orders ORDER BY created_at DESC LIMIT 200")->fetchAll();
+        } else {
+            $s = $db->prepare("SELECT * FROM orders WHERE status=? ORDER BY created_at DESC LIMIT 200");
+            $s->execute([$status]);
+            $rows = $s->fetchAll();
+        }
+        echo json_encode(['success'=>true,'data'=>$rows]); break;
+
+    // ── TELEGRAM TEST
+    case 'test_telegram':
+        $token  = getSetting($db,'telegram_bot_token');
+        $chatId = getSetting($db,'telegram_chat_id');
+        if (!$token || !$chatId) { echo json_encode(['success'=>false,'message'=>'يرجى إدخال التوكن والـ Chat ID أولاً']); break; }
+        $ch = curl_init("https://api.telegram.org/bot{$token}/sendMessage");
+        curl_setopt_array($ch,[CURLOPT_POST=>true,CURLOPT_RETURNTRANSFER=>true,CURLOPT_TIMEOUT=>8,
+            CURLOPT_POSTFIELDS=>['chat_id'=>$chatId,'text'=>'✅ البوت يعمل بشكل صحيح — Mr. Donar']]);
+        $r = json_decode(curl_exec($ch),true); curl_close($ch);
+        echo json_encode(['success'=>!empty($r['ok']),'message'=>$r['description']??'']); break;
+
+    // ── REGISTER WEBHOOK
+    case 'check_webhook':
+        $token = getSetting($db,'telegram_bot_token');
+        if (!$token) { echo json_encode(['success'=>false,'message'=>'لم يتم إدخال التوكن']); break; }
+        $ch = curl_init("https://api.telegram.org/bot{$token}/getWebhookInfo");
+        curl_setopt_array($ch,[CURLOPT_RETURNTRANSFER=>true,CURLOPT_TIMEOUT=>8]);
+        $r = json_decode(curl_exec($ch),true); curl_close($ch);
+        echo json_encode(['success'=>!empty($r['ok']),'webhook_info'=>$r['result']??null,'message'=>$r['description']??'']); break;
+
+    case 'register_webhook':
+        $token = getSetting($db,'telegram_bot_token');
+        if (!$token) { echo json_encode(['success'=>false,'message'=>'يرجى إدخال التوكن أولاً']); break; }
+        // ✅ استخدام الرابط المُرسَل من لوحة التحكم
+        $webhookUrl = trim($_POST['webhook_url'] ?? '');
+        if (!$webhookUrl || !filter_var($webhookUrl, FILTER_VALIDATE_URL)) {
+            echo json_encode(['success'=>false,'message'=>'يرجى إدخال رابط الـ Webhook (ngrok URL)']); break;
+        }
+        $webhookUrl = rtrim($webhookUrl,'/') . '/api/telegram.php';
+        $secret = getSetting($db,'telegram_webhook_secret');
+        $ch = curl_init("https://api.telegram.org/bot{$token}/setWebhook");
+        $payload = ['url'=>$webhookUrl];
+        if ($secret) $payload['secret_token'] = $secret;
+        curl_setopt_array($ch,[CURLOPT_POST=>true,CURLOPT_RETURNTRANSFER=>true,CURLOPT_TIMEOUT=>8,
+            CURLOPT_POSTFIELDS=>$payload]);
+        $r = json_decode(curl_exec($ch),true); curl_close($ch);
+        echo json_encode(['success'=>!empty($r['ok']),'url'=>$webhookUrl,'message'=>$r['description']??'']); break;
 
     // ── SOCIAL LINKS
     case 'get_social_links':
