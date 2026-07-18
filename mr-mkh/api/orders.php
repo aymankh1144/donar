@@ -77,6 +77,29 @@ $customerPhone = trim($body['customer_phone'] ?? '');
 $notes         = trim($body['notes']          ?? '');
 $items         = $body['items']               ?? [];
 
+// ── نوع الطلب: dine_in (طاولة) / pickup (استلام مباشر) / delivery (توصيل) ──
+$orderType       = trim($body['order_type'] ?? 'pickup');
+$tableNumber     = trim($body['table_number'] ?? '');
+$deliveryAddress = trim($body['delivery_address'] ?? '');
+
+if (!in_array($orderType, ['dine_in', 'pickup', 'delivery'], true)) {
+    echo json_encode(['success'=>false,'message'=>'نوع الطلب غير صالح']); exit;
+}
+if ($orderType === 'dine_in') {
+    if (!$tableNumber || strlen($tableNumber) > 10) {
+        echo json_encode(['success'=>false,'message'=>'رقم الطاولة مطلوب']); exit;
+    }
+    $deliveryAddress = '';
+} elseif ($orderType === 'delivery') {
+    if (!$deliveryAddress || strlen($deliveryAddress) > 300) {
+        echo json_encode(['success'=>false,'message'=>'عنوان التوصيل مطلوب']); exit;
+    }
+    $tableNumber = '';
+} else {
+    $tableNumber = '';
+    $deliveryAddress = '';
+}
+
 if (!$customerName) {
     echo json_encode(['success'=>false,'message'=>'اسم الزبون مطلوب']); exit;
 }
@@ -124,8 +147,8 @@ if (empty($cleanItems)) {
 try {
     $orderNum = generateOrderNum($db);
     $stmt = $db->prepare("
-        INSERT INTO orders (order_num, customer_name, customer_phone, items, notes, total, status, created_at, updated_at)
-        VALUES (?, ?, ?, ?, ?, ?, 'pending', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+        INSERT INTO orders (order_num, customer_name, customer_phone, items, notes, total, status, order_type, table_number, delivery_address, created_at, updated_at)
+        VALUES (?, ?, ?, ?, ?, ?, 'pending', ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
     ");
     $stmt->execute([
         $orderNum,
@@ -134,6 +157,9 @@ try {
         json_encode($cleanItems, JSON_UNESCAPED_UNICODE),
         $notes,
         $serverTotal,
+        $orderType,
+        $tableNumber,
+        $deliveryAddress,
     ]);
     $orderId = $db->lastInsertId();
 } catch (Throwable $e) {
@@ -144,7 +170,7 @@ try {
 $botToken = getSetting($db, 'telegram_bot_token');
 $chatId   = getSetting($db, 'telegram_chat_id');
 if ($botToken && $chatId) {
-    sendTelegramOrder($botToken, $chatId, $orderId, $orderNum, $customerName, $customerPhone, $cleanItems, $serverTotal, $notes, $db);
+    sendTelegramOrder($botToken, $chatId, $orderId, $orderNum, $customerName, $customerPhone, $cleanItems, $serverTotal, $notes, $db, $orderType, $tableNumber, $deliveryAddress);
 }
 
 echo json_encode([
@@ -155,7 +181,8 @@ echo json_encode([
 
 // ── دالة إرسال تيليغرام ───────────────────────────────────
 function sendTelegramOrder(string $token, string $chatId, int $orderId, string $orderNum,
-    string $name, string $phone, array $items, float $total, string $notes, PDO $db): void
+    string $name, string $phone, array $items, float $total, string $notes, PDO $db,
+    string $orderType = 'pickup', string $tableNumber = '', string $deliveryAddress = ''): void
 {
     $itemsText = implode("\n", array_map(
         fn($i) => "  • {$i['name']} × {$i['qty']} — " . number_format($i['price'] * $i['qty'], 0) . ' ل.س',
@@ -164,12 +191,20 @@ function sendTelegramOrder(string $token, string $chatId, int $orderId, string $
     $notesLine = $notes ? "\n📝 *ملاحظات:* " . escTg($notes) : '';
     $phoneLine = $phone ? "\n📞 *الهاتف:* " . escTg($phone) : '';
 
+    $typeLabels = [
+        'dine_in'  => '🍽️ في المطعم — طاولة رقم ' . escTg($tableNumber),
+        'pickup'   => '🏃 استلام مباشر من المطعم',
+        'delivery' => '🛵 توصيل — ' . escTg($deliveryAddress),
+    ];
+    $typeLine = "\n📍 *نوع الطلب:* " . ($typeLabels[$orderType] ?? $orderType);
+
     $text = "🟢 *طلب جديد {$orderNum}*\n"
           . "─────────────────\n"
           . $itemsText . "\n"
           . "─────────────────\n"
           . "👤 *الاسم:* " . escTg($name)
           . $phoneLine
+          . $typeLine
           . $notesLine . "\n"
           . "💰 *الإجمالي:* " . number_format($total, 0) . " ل.س";
 
