@@ -566,6 +566,16 @@ body.dark .cat-card:hover .cat-arrow{background:rgba(212,175,55,.28)}
 .cart-input:focus{border-color:rgba(212,175,55,.5)}
 .cart-input::placeholder{color:rgba(212,175,55,.35)}
 .cart-textarea{resize:none}
+
+/* اختيار نوع الطلب */
+.order-type-tabs{display:flex;gap:8px;margin-bottom:12px}
+.order-type-tab{flex:1;text-align:center;background:rgba(212,175,55,.06);border:1px solid rgba(212,175,55,.2);border-radius:12px;padding:10px 4px;cursor:pointer;transition:.2s;font-family:'Cairo',sans-serif}
+.order-type-tab .ot-icon{font-size:20px;display:block;margin-bottom:4px}
+.order-type-tab .ot-label{font-size:12px;color:rgba(255,255,255,.7);font-weight:600}
+.order-type-tab.active{background:rgba(212,175,55,.18);border-color:#d4af37}
+.order-type-tab.active .ot-label{color:#d4af37}
+.order-type-extra{display:none;margin-bottom:10px}
+.order-type-extra.show{display:block}
 .cart-submit-btn{width:100%;background:#d4af37;color:#000;border:none;border-radius:14px;padding:15px;font-size:17px;font-weight:700;font-family:'Cairo',sans-serif;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:.2s;margin-top:4px}
 .cart-submit-btn:hover:not(:disabled){background:#e8c84a}
 .cart-submit-btn:disabled{opacity:.6;cursor:not-allowed}
@@ -823,8 +833,8 @@ body.dark .cat-card:hover .cat-arrow{background:rgba(212,175,55,.28)}
 <script>
 const S={lang:localStorage.getItem('lang')||'ar',theme:localStorage.getItem('theme')||'light',cfg:{slogan_ar:<?= json_encode($settings['slogan_ar']??'') ?>,slogan_en:<?= json_encode($settings['slogan_en']??'') ?>}};
 const TX={
-  ar:{cats:'الفئات',back:'رجوع',arrow:'←',items_n:n=>`${n} عنصر`,empty_cats:'لا توجد فئات',empty_items:'لا توجد وجبات',syp:'ل.س',offers:'العروض الخاصة',badge:'خصم',ingredients:'المكونات',features:'المميزات',desc:'الوصف',wa:'واتساب',call:'اتصال',fb:'فيسبوك',ig:'انستغرام',more:'التفاصيل ←',add:'أضف',view_cart:'عرض السلة',cart_title:'سلة الطلبات',total:'الإجمالي',order_info:'بيانات الطلب',name_ph:'الاسم *',phone_ph:'رقم الهاتف *',notes_ph:'ملاحظات إضافية (اختياري)',send_order:'إرسال الطلب',sending:'جارٍ الإرسال...',cart_empty:'السلة فارغة',order_ok:'تم استلام طلبك بنجاح. بانتظار رد المطبخ...',order_err:'حدث خطأ أثناء إرسال الطلب. يرجى المحاولة مجدداً.',conn_err:'تعذّر الاتصال بالخادم.',added:'✓ أُضيف:',search_ph:'ابحث في القائمة...',no_results:'لا توجد نتائج لهذا البحث',status:{pending:{icon:'⏳',text:'بانتظار رد المطبخ...'},accepted:{icon:'✅',text:'تم قبول طلبك. جارٍ التحضير قريباً.'},rejected:{icon:'❌',text:'عذراً، تم رفض طلبك.'},preparing:{icon:'🍳',text:'طلبك قيد التحضير الآن.'},ready:{icon:'🟢',text:'طلبك جاهز للتسليم!'},delivered:{icon:'✔️',text:'تم تسليم طلبك. شكراً لك!'}}},
-  en:{cats:'Categories',back:'Back',arrow:'→',items_n:n=>`${n} items`,empty_cats:'No categories',empty_items:'No items',syp:'SYP',offers:'Special Offers',badge:'SALE',ingredients:'Ingredients',features:'Features',desc:'Description',wa:'WhatsApp',call:'Call',fb:'Facebook',ig:'Instagram',more:'Details →',add:'Add',view_cart:'View Cart',cart_title:'Order Cart',total:'Total',order_info:'Order Details',name_ph:'Name *',phone_ph:'Phone number *',notes_ph:'Additional notes (optional)',send_order:'Send Order',sending:'Sending...',cart_empty:'Cart is empty',order_ok:'Your order has been received. Waiting for kitchen response...',order_err:'An error occurred. Please try again.',conn_err:'Could not connect to server.',added:'✓ Added:',search_ph:'Search menu...',no_results:'No results found',status:{pending:{icon:'⏳',text:'Waiting for kitchen response...'},accepted:{icon:'✅',text:'Your order has been accepted!'},rejected:{icon:'❌',text:'Sorry, your order was rejected.'},preparing:{icon:'🍳',text:'Your order is being prepared.'},ready:{icon:'🟢',text:'Your order is ready for delivery!'},delivered:{icon:'✔️',text:'Your order has been delivered. Thank you!'}}}
+  ar:{cats:'الفئات',back:'رجوع',arrow:'←',items_n:n=>`${n} عنصر`,empty_cats:'لا توجد فئات',empty_items:'لا توجد وجبات',syp:'ل.س',offers:'العروض الخاصة',badge:'خصم',ingredients:'المكونات',features:'المميزات',desc:'الوصف',wa:'واتساب',call:'اتصال',fb:'فيسبوك',ig:'انستغرام',more:'التفاصيل ←',add:'أضف',view_cart:'عرض السلة',cart_title:'سلة الطلبات',total:'الإجمالي',order_info:'بيانات الطلب',order_type_title:'طريقة الاستلام',dine_in:'في المطعم',pickup:'استلام مباشر',delivery:'توصيل',table_ph:'رقم الطاولة *',address_ph:'العنوان بالتفصيل *',table_required:'رقم الطاولة مطلوب',address_required:'العنوان مطلوب',name_ph:'الاسم *',phone_ph:'رقم الهاتف *',notes_ph:'ملاحظات إضافية (اختياري)',send_order:'إرسال الطلب',sending:'جارٍ الإرسال...',cart_empty:'السلة فارغة',order_ok:'تم استلام طلبك بنجاح. بانتظار رد المطبخ...',order_err:'حدث خطأ أثناء إرسال الطلب. يرجى المحاولة مجدداً.',conn_err:'تعذّر الاتصال بالخادم.',added:'✓ أُضيف:',search_ph:'ابحث في القائمة...',no_results:'لا توجد نتائج لهذا البحث',status:{pending:{icon:'⏳',text:'بانتظار رد المطبخ...'},accepted:{icon:'✅',text:'تم قبول طلبك. جارٍ التحضير قريباً.'},rejected:{icon:'❌',text:'عذراً، تم رفض طلبك.'},preparing:{icon:'🍳',text:'طلبك قيد التحضير الآن.'},ready:{icon:'🟢',text:'طلبك جاهز للتسليم!'},delivered:{icon:'✔️',text:'تم تسليم طلبك. شكراً لك!'}}},
+  en:{cats:'Categories',back:'Back',arrow:'→',items_n:n=>`${n} items`,empty_cats:'No categories',empty_items:'No items',syp:'SYP',offers:'Special Offers',badge:'SALE',ingredients:'Ingredients',features:'Features',desc:'Description',wa:'WhatsApp',call:'Call',fb:'Facebook',ig:'Instagram',more:'Details →',add:'Add',view_cart:'View Cart',cart_title:'Order Cart',total:'Total',order_info:'Order Details',order_type_title:'Order Method',dine_in:'Dine-in',pickup:'Pickup',delivery:'Delivery',table_ph:'Table number *',address_ph:'Full address *',table_required:'Table number is required',address_required:'Address is required',name_ph:'Name *',phone_ph:'Phone number *',notes_ph:'Additional notes (optional)',send_order:'Send Order',sending:'Sending...',cart_empty:'Cart is empty',order_ok:'Your order has been received. Waiting for kitchen response...',order_err:'An error occurred. Please try again.',conn_err:'Could not connect to server.',added:'✓ Added:',search_ph:'Search menu...',no_results:'No results found',status:{pending:{icon:'⏳',text:'Waiting for kitchen response...'},accepted:{icon:'✅',text:'Your order has been accepted!'},rejected:{icon:'❌',text:'Sorry, your order was rejected.'},preparing:{icon:'🍳',text:'Your order is being prepared.'},ready:{icon:'🟢',text:'Your order is ready for delivery!'},delivered:{icon:'✔️',text:'Your order has been delivered. Thank you!'}}}
 };
 const t=()=>TX[S.lang];
 const FOOD_SVG=`<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:48px;height:48px"><path d="M18 2v20M15 2v6c0 1.657 1.343 3 3 3s3-1.343 3-3V2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M6 2v5M9 2v5M6 7c0 1.657 1.343 3 3 3V22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`;
@@ -854,6 +864,14 @@ function applyLang(l,reload=true){
   const on=document.getElementById('order-name');if(on)on.placeholder=t().name_ph;
   const op=document.getElementById('order-phone');if(op)op.placeholder=t().phone_ph;
   const ono=document.getElementById('order-notes');if(ono)ono.placeholder=t().notes_ph;
+  const ott=document.querySelector('.order-type-title');if(ott)ott.textContent=t().order_type_title;
+  const otbl=document.querySelectorAll('#order-type-tabs .order-type-tab');
+  if(otbl.length){
+    const keys=['dine_in','pickup','delivery'];
+    otbl.forEach((el,idx)=>{const lb=el.querySelector('.ot-label');if(lb)lb.textContent=t()[keys[idx]];});
+  }
+  const otb=document.getElementById('order-table');if(otb)otb.placeholder=t().table_ph;
+  const oad=document.getElementById('order-address');if(oad)oad.placeholder=t().address_ph;
   const csb=document.getElementById('submit-btn-text');if(csb)csb.textContent=t().send_order;
   const adl=document.getElementById('app-dl-label');if(adl)adl.textContent=l==='ar'?'حمّل تطبيق طلباتك بلس':'Download Talabatuk Plus App';
   const tol=document.getElementById('track-order-label');if(tol)tol.textContent=l==='ar'?'تابع طلبك':'Track Your Order';
@@ -1248,6 +1266,23 @@ document.addEventListener('DOMContentLoaded', initTrackBtn);
     <!-- نموذج بيانات الزبون -->
     <div class="cart-form" id="cart-form">
       <div class="cart-form-title">بيانات الطلب</div>
+
+      <div class="order-type-title" style="font-size:13px;color:rgba(212,175,55,.7);margin-bottom:8px;font-family:'Cairo',sans-serif">طريقة الاستلام</div>
+      <div class="order-type-tabs" id="order-type-tabs">
+        <div class="order-type-tab" data-type="dine_in" onclick="selectOrderType('dine_in')">
+          <span class="ot-icon">🍽️</span><span class="ot-label">في المطعم</span>
+        </div>
+        <div class="order-type-tab active" data-type="pickup" onclick="selectOrderType('pickup')">
+          <span class="ot-icon">🏃</span><span class="ot-label">استلام مباشر</span>
+        </div>
+        <div class="order-type-tab" data-type="delivery" onclick="selectOrderType('delivery')">
+          <span class="ot-icon">🛵</span><span class="ot-label">توصيل</span>
+        </div>
+      </div>
+
+      <input type="text" id="order-table" class="cart-input order-type-extra" placeholder="رقم الطاولة *" maxlength="10" inputmode="numeric">
+      <textarea id="order-address" class="cart-input cart-textarea order-type-extra" placeholder="العنوان بالتفصيل *" rows="2" maxlength="300"></textarea>
+
       <input type="text" id="order-name" class="cart-input" placeholder="الاسم *" maxlength="80">
       <input type="tel" id="order-phone" class="cart-input" placeholder="رقم الهاتف *" maxlength="20" required>
       <textarea id="order-notes" class="cart-input cart-textarea" placeholder="ملاحظات إضافية (اختياري)" rows="3" maxlength="300"></textarea>
@@ -1268,6 +1303,29 @@ document.addEventListener('DOMContentLoaded', initTrackBtn);
 <script>
 // ── السلة ────────────────────────────────────────────────────
 let CART = []; // [{id, name, price, qty}]
+let ORDER_TYPE = 'pickup'; // dine_in | pickup | delivery
+
+// ✅ إصلاح: toast() كانت تُستدعى (مثلاً عند نسيان رقم الهاتف) بدون أن تكون معرّفة
+function toast(msg, type = 'ok') {
+  const el = document.getElementById('toast');
+  if (!el) return;
+  el.textContent = msg;
+  el.style.borderColor = type === 'err' ? '#e57373' : '';
+  el.classList.add('show');
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+function selectOrderType(type) {
+  ORDER_TYPE = type;
+  document.querySelectorAll('#order-type-tabs .order-type-tab').forEach(el => {
+    el.classList.toggle('active', el.dataset.type === type);
+  });
+  const tableEl = document.getElementById('order-table');
+  const addrEl  = document.getElementById('order-address');
+  tableEl.classList.toggle('show', type === 'dine_in');
+  addrEl.classList.toggle('show', type === 'delivery');
+}
 
 function addToCart(id, name, price) {
   const existing = CART.find(i => i.id === id);
@@ -1371,12 +1429,26 @@ async function submitOrder() {
   const name  = document.getElementById('order-name').value.trim();
   const phone = document.getElementById('order-phone').value.trim();
   const notes = document.getElementById('order-notes').value.trim();
+  const tableNumber      = document.getElementById('order-table').value.trim();
+  const deliveryAddress  = document.getElementById('order-address').value.trim();
+
   if (!phone) { toast(S.lang==='ar'?'رقم الهاتف مطلوب':'Phone number is required','err'); return; }
 
   if (!name) {
     document.getElementById('order-name').focus();
     document.getElementById('order-name').style.borderColor = '#e57373';
     setTimeout(() => document.getElementById('order-name').style.borderColor = '', 2000);
+    return;
+  }
+
+  if (ORDER_TYPE === 'dine_in' && !tableNumber) {
+    toast(t().table_required, 'err');
+    document.getElementById('order-table').focus();
+    return;
+  }
+  if (ORDER_TYPE === 'delivery' && !deliveryAddress) {
+    toast(t().address_required, 'err');
+    document.getElementById('order-address').focus();
     return;
   }
 
@@ -1389,11 +1461,14 @@ async function submitOrder() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        customer_name:  name,
-        customer_phone: phone,
-        notes:          notes,
-        items:          CART.map(i=>({id:i.id, qty:i.qty})), // ✅ نرسل ID والكمية فقط، لا الأسعار
-        total:          0
+        customer_name:     name,
+        customer_phone:    phone,
+        notes:             notes,
+        items:             CART.map(i=>({id:i.id, qty:i.qty})), // ✅ نرسل ID والكمية فقط، لا الأسعار
+        total:             0,
+        order_type:        ORDER_TYPE,
+        table_number:      ORDER_TYPE === 'dine_in'  ? tableNumber     : '',
+        delivery_address:  ORDER_TYPE === 'delivery' ? deliveryAddress : ''
       })
     });
     const data = await res.json();
@@ -1411,6 +1486,8 @@ async function submitOrder() {
       localStorage.setItem('my_orders', JSON.stringify(savedOrders.slice(0, 10)));
       CART = [];
       updateCartBar();
+      document.getElementById('order-table').value = '';
+      document.getElementById('order-address').value = '';
       showTrackBtn(data.order_num); // ✅ إظهار زر التتبع
       startPolling(data.order_num);
     } else {
