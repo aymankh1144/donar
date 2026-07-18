@@ -80,6 +80,7 @@ body{background:#0d0d0d;color:#D3C9B5;font-family:'Cairo',sans-serif;min-height:
 .order-badge{border-radius:20px;padding:4px 12px;font-size:12px;font-weight:600;white-space:nowrap}
 .order-customer{font-size:14px;font-weight:600;margin-bottom:4px}
 .order-phone{font-size:12px;color:rgba(200,170,100,.5)}
+.order-type-badge{font-size:12px;color:var(--gold);background:rgba(212,175,55,.1);display:inline-block;padding:3px 10px;border-radius:20px;margin-top:5px}
 .order-items{background:rgba(0,0,0,.2);border-radius:8px;padding:8px 12px;margin:8px 0;font-size:13px;color:rgba(200,170,100,.7);line-height:1.8}
 .order-footer{display:flex;justify-content:space-between;align-items:center;margin-top:10px;flex-wrap:wrap;gap:6px}
 .order-total{font-weight:800;color:var(--gold);font-size:15px}
@@ -995,6 +996,13 @@ async function loadOrders() {
     return;
   }
 
+  function orderTypeHtml(o) {
+    const type = o.order_type || 'pickup';
+    if (type === 'dine_in')  return `<div class="order-type-badge">🍽️ في المطعم — طاولة رقم ${o.table_number || '-'}</div>`;
+    if (type === 'delivery') return `<div class="order-type-badge">🛵 توصيل — ${o.delivery_address || '-'}</div>`;
+    return `<div class="order-type-badge">🏃 استلام مباشر</div>`;
+  }
+
   container.innerHTML = orders.map(o => {
     const items   = JSON.parse(o.items || '[]');
     const color   = ORDER_STATUS_COLORS[o.status] || 'rgba(212,175,55,.2)';
@@ -1019,6 +1027,7 @@ async function loadOrders() {
       </div>
       <div class="order-customer">${o.customer_name}</div>
       ${o.customer_phone ? `<div class="order-phone">📞 ${o.customer_phone}</div>` : ''}
+      ${orderTypeHtml(o)}
       <div class="order-items">${itemsHtml}</div>
       ${o.notes ? `<div class="order-notes">📝 ${o.notes}</div>` : ''}
       <div class="order-footer">
