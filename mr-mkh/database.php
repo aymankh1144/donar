@@ -93,12 +93,27 @@ function initDB($db) {
             notes       TEXT NOT NULL DEFAULT '',
             total       REAL NOT NULL DEFAULT 0,
             status      TEXT NOT NULL DEFAULT 'pending',
+            order_type  TEXT NOT NULL DEFAULT 'pickup',
+            table_number TEXT NOT NULL DEFAULT '',
+            delivery_address TEXT NOT NULL DEFAULT '',
             telegram_message_id INTEGER DEFAULT NULL,
             created_at  DATETIME DEFAULT CURRENT_TIMESTAMP,
             updated_at  DATETIME DEFAULT CURRENT_TIMESTAMP
         );
     ");
 
+    $existingCols = array_column($db->query("PRAGMA table_info(orders)")->fetchAll(), 'name');
+    $newCols = [
+        'order_type'       => "ALTER TABLE orders ADD COLUMN order_type TEXT NOT NULL DEFAULT 'pickup'",
+        'table_number'     => "ALTER TABLE orders ADD COLUMN table_number TEXT NOT NULL DEFAULT ''",
+        'delivery_address' => "ALTER TABLE orders ADD COLUMN delivery_address TEXT NOT NULL DEFAULT ''",
+    ];
+    foreach ($newCols as $col => $sql) {
+        if (!in_array($col, $existingCols, true)) {
+            $db->exec($sql);
+        }
+    }
+    
     $stmt = $db->prepare("INSERT OR IGNORE INTO settings (key, value) VALUES (?, ?)");
     $defaults = [
         ['admin_username', 'Rami'],
