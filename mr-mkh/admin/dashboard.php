@@ -124,7 +124,8 @@ tr:hover td{background:rgba(201,168,76,.04)}
 .fg input::placeholder,.fg textarea::placeholder{color:rgba(201,168,76,.22)}
 .fg select option{background:#1e1b16;color:#E8C97A}
 .fg textarea{resize:vertical;min-height:68px;line-height:1.5}
-.img-preview{width:100%;height:150px;object-fit:cover;border-radius:10px;border:1px solid var(--border);margin-bottom:.75rem;display:none}
+.img-preview{width:100%;height:150px;object-fit:cover;border-radius:10px;border:1px solid var(--border);margin-bottom:.75rem;display:none;cursor:pointer;transition:opacity .2s}
+.img-preview:hover{opacity:.75}
 .img-prev-placeholder{width:100%;height:100px;border-radius:10px;border:1px dashed rgba(201,168,76,.25);display:flex;align-items:center;justify-content:center;color:rgba(201,168,76,.35);font-size:13px;margin-bottom:.75rem;cursor:pointer}
 .img-prev-placeholder:hover{border-color:rgba(201,168,76,.5);color:rgba(201,168,76,.6)}
 .save-btn{width:100%;padding:11px;background:linear-gradient(135deg,#C9A84C,#8B6914);border:none;border-radius:10px;color:#111;font-size:15px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;transition:opacity var(--tr),transform .1s;margin-top:.5rem}
@@ -358,8 +359,8 @@ tr:hover td{background:rgba(201,168,76,.04)}
   <div class="fg"><label>Features (English)</label><input type="text" id="im-feat-en" placeholder="High protein, Healthy, Fresh"></div>
   <div class="fg">
     <label>صورة الوجبة</label>
-    <img id="im-preview" class="img-preview" alt="preview">
-    <div class="img-prev-placeholder" id="im-placeholder" onclick="document.getElementById('im-file').click()">📷 اضغط لاختيار صورة</div>
+        <img id="im-preview" class="img-preview" alt="preview" onclick="document.getElementById('im-file').click()">
+      <div class="img-prev-placeholder" id="im-placeholder" onclick="document.getElementById('im-file').click()">📷 اضغط لاختيار صورة</div>
     <input type="file" id="im-file" accept="image/*" style="display:none" onchange="previewImg(this,'im-preview','im-placeholder')">
   </div>
   <div class="fg"><label>الحالة</label><select id="im-active"><option value="1">نشط ✓</option><option value="0">مخفي</option></select></div>
@@ -385,7 +386,7 @@ tr:hover td{background:rgba(201,168,76,.04)}
   <div class="fg"><label>الوجبة المرتبطة (اختياري)</label><select id="om-item"><option value="">-- اختر وجبة --</option></select></div>
   <div class="fg">
     <label>صورة العرض (اختياري - إذا تركته سيستخدم صورة الوجبة)</label>
-    <img id="om-preview" class="img-preview" alt="preview">
+    <img id="om-preview" class="img-preview" alt="preview" onclick="document.getElementById('om-file').click()">
     <div class="img-prev-placeholder" id="om-placeholder" onclick="document.getElementById('om-file').click()">📷 اضغط لاختيار صورة</div>
     <input type="file" id="om-file" accept="image/*" style="display:none" onchange="previewImg(this,'om-preview','om-placeholder')">
   </div>
@@ -418,8 +419,8 @@ tr:hover td{background:rgba(201,168,76,.04)}
   </div>
   <div id="lm-upload-wrap" class="fg" style="display:none">
     <label>ملف الأيقونة (PNG أو SVG — max 512KB)</label>
-    <img id="lm-icon-preview" class="img-preview" alt="icon preview" style="height:80px;width:80px;border-radius:50%">
-    <div class="img-prev-placeholder" id="lm-icon-placeholder" onclick="document.getElementById('lm-icon-file').click()">📷 اختر أيقونة</div>
+        <img id="lm-icon-preview" class="img-preview" alt="icon preview" style="height:80px;width:80px;border-radius:50%;cursor:pointer" onclick="document.getElementById('lm-icon-file').click()">
+      <div class="img-prev-placeholder" id="lm-icon-placeholder" onclick="document.getElementById('lm-icon-file').click()">📷 اختر أيقونة</div>
     <input type="file" id="lm-icon-file" accept="image/png,image/svg+xml,image/webp,image/jpeg" style="display:none" onchange="previewImg(this,'lm-icon-preview','lm-icon-placeholder')">
   </div>
   <div class="fg"><label>الحالة</label><select id="lm-active"><option value="1">نشط ✓</option><option value="0">مخفي</option></select></div>
