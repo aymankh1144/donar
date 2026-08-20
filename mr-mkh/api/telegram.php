@@ -84,18 +84,29 @@ $itemsText = implode("\n", array_map(
 $notesLine = $order['notes'] ? "\n📝 *ملاحظات:* " . escTg($order['notes']) : '';
 $phoneLine = $order['customer_phone'] ? "\n📞 *الهاتف:* " . escTg($order['customer_phone']) : '';
 
+// ✅ إضافة سطر نوع الطلب (كان مفقوداً هنا وهو سبب اختفاء العنوان)
+$typeLabels = [
+    'dine_in'  => '🍽️ في المطعم — طاولة رقم ' . escTg($order['table_number']),
+    'pickup'   => '🏃 استلام مباشر من المطعم',
+    'delivery' => '🛵 توصيل — ' . escTg($order['delivery_address']),
+];
+$typeLine = "\n📍 *نوع الطلب:* " . ($typeLabels[$order['order_type']] ?? $order['order_type']);
+
 $newText = "🟢 *طلب {$order['order_num']}*\n"
          . "─────────────────\n"
          . $itemsText . "\n"
          . "─────────────────\n"
          . "👤 *الاسم:* " . escTg($order['customer_name'])
          . $phoneLine
+         . $typeLine
          . $notesLine . "\n"
          . "💰 *الإجمالي:* " . number_format($order['total'], 0) . " ل.س\n"
          . "─────────────────\n"
          . "الحالة: " . ($statusLabels[$newStatus] ?? $newStatus);
-
 editMessage($botToken, $chatId, $msgId, $newText, $keyboard);
+
+
+
 
 $cbLabels = [
     'accept'    => '✅ تم القبول',
